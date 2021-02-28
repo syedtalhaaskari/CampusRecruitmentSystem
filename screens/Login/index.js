@@ -60,6 +60,7 @@ const Login = (props) => {
             <Button full danger style={styles.btn} onPress={submitForm}><Text>Login</Text></Button>
             <Button onPress={() => props.navigation.navigate("LoginArea", { screen: "Register" })} full info style={styles.btn}><Text>Register</Text></Button>
           </Form>
+          <Text style={{color: "white", textAlign:"center", marginTop: 20}}>To Login as Admin use: admin@admin.com =&gt; password: admin123</Text>
         </Content>
         {
           props.user.loading && <View style={styles.spinner}>

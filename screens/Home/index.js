@@ -5,18 +5,7 @@ import { ImageBackground, StyleSheet, ScrollView, Modal, TouchableHighlight, Tou
 import image from "../../assets/images/background.jpg"
 import { connect } from "react-redux"
 import { userLogout } from "../../redux"
-// import { firebase_donors } from "../../store/action"
-import database from "@react-native-firebase/database"
-import moment from "moment"
 
-const Details = (e) => {
-    return (
-        <View>
-            <Text>Name: {e.name}</Text>
-            <Text>Age: {e.age}</Text>
-        </View>
-    )
-}
 
 const Home = (props) => {
 
@@ -46,12 +35,18 @@ const Home = (props) => {
                             props.user.user.type === "Student" ?
                                 <>
                                     <TouchableHighlight activeOpacity={0.8} style={styles.btn} onPress={() => props.navigation.navigate("UploadMarks")}><Text style={styles.btnText}>Upload Marks</Text></TouchableHighlight>
-                                    <TouchableHighlight activeOpacity={0.8} style={styles.btn} onPress={() => props.navigation.navigate("ProfileEdit")}><Text style={styles.btnText}>Check for Vacancy</Text></TouchableHighlight>
+                                    <TouchableHighlight activeOpacity={0.8} style={styles.btn} onPress={() => props.navigation.navigate("CheckForVacancy")}><Text style={styles.btnText}>Check for Vacancy</Text></TouchableHighlight>
                                 </> :
                                 <>
                                     <TouchableHighlight activeOpacity={0.8} style={styles.btn} onPress={() => props.navigation.navigate("ViewResume")}><Text style={styles.btnText}>View Resume</Text></TouchableHighlight>
-                                    {/* <TouchableHighlight activeOpacity={0.8} style={styles.btn} onPress={() => props.navigation.navigate("PostForVacancy")}><Text style={styles.btnText}>Post for Vacancy</Text></TouchableHighlight> */}
+                                    <TouchableHighlight activeOpacity={0.8} style={styles.btn} onPress={() => props.navigation.navigate("PostForVacancy")}><Text style={styles.btnText}>Post for Vacancy</Text></TouchableHighlight>
                                 </>
+                        }
+                        {
+                            props.user.user.type === "Admin" &&
+                            <>
+                                <TouchableHighlight activeOpacity={0.8} style={styles.btn} onPress={() => props.navigation.navigate("CheckForVacancy")}><Text style={styles.btnText}>Check for Vacancy</Text></TouchableHighlight>
+                            </>
                         }
                         <TouchableHighlight activeOpacity={0.8} style={styles.btn} onPress={() => props.navigation.navigate("ProfileEdit")}><Text style={styles.btnText}>Update Profile</Text></TouchableHighlight>
                         <TouchableHighlight activeOpacity={0.8} style={styles.btn} onPress={() => props.userLogout("ProfileEdit")}><Text style={styles.btnText}>Signout</Text></TouchableHighlight>
@@ -68,7 +63,7 @@ const Home = (props) => {
 }
 
 const mapStateToProps = (state) => ({
-    user: state.user
+    user: state.user,
 })
 
 const mapDispatchToProps = (dispatch) => ({

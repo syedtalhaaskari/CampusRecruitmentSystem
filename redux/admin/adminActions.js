@@ -4,6 +4,7 @@ import {
     FETCH_ADMIN_FAILURE,
 } from "./adminTypes"
 import auth from "@react-native-firebase/auth"
+import database from "@react-native-firebase/database"
 
 export const fetchAdminRequest = () => {
     return {
@@ -29,7 +30,7 @@ export const fetchAdmin = () => {
     return dispatch => {
         dispatch(fetchAdminRequest)
         auth().onAuthStateChanged(admin => {
-            if (admin)  
+            if (admin)
                 dispatch(fetchAdminSuccess(admin))
             else
                 dispatch(fetchAdminFailure("LoginFirst"))

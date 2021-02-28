@@ -29,9 +29,7 @@ export const fetchStudent = () => {
     return dispatch => {
         dispatch(fetchStudentRequest)
         database().ref("/").orderByChild("type").equalTo("Student").on("value", function (snapshot) {
-            
             snapshot.forEach(function (child) {
-                console.log("\n\n" + child.val() + "\n\n")
                 dispatch(fetchStudentSuccess(child.val())) // NOW THE CHILDREN PRINT IN ORDER    
             });
         })

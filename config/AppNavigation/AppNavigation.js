@@ -9,6 +9,8 @@ import Profile from '../../screens/Profile';
 import ProfileEdit from '../../screens/ProfileEdit';
 import UploadMarks from '../../screens/UploadMarks';
 import ViewResume from '../../screens/ViewResume';
+import PostForVacancy from '../../screens/PostForVacancy';
+import CheckForVacancy from '../../screens/CheckForVacancy';
 
 const Dashboard = () => {
     const Drawer = createDrawerNavigator();
@@ -44,7 +46,8 @@ const AppNavigation = props => {
                 <Stack.Screen name="ProfileEdit" component={ProfileEdit} />
                 <Stack.Screen name="UploadMarks" component={UploadMarks} />
                 <Stack.Screen name="ViewResume" component={ViewResume} />
-                {/* <Stack.Screen name="PostForVacancy" component={UploadMarks} />s */}
+                <Stack.Screen name="PostForVacancy" component={PostForVacancy} />
+                <Stack.Screen name="CheckForVacancy" component={CheckForVacancy} />
             </Stack.Navigator>
         </NavigationContainer>
     );

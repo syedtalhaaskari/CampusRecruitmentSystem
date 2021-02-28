@@ -20,7 +20,7 @@ const reducer = (state = initialState, action) => {
         case FETCH_STUDENT_SUCCESS:
             return {
                 loading: false,
-                student: [...state.student, action.payload],
+                student: [action.payload],
                 error: "",
             }
         case FETCH_STUDENT_FAILURE:

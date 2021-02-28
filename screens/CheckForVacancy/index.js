@@ -4,40 +4,18 @@ import { Container, Form, Item, Text, View, Picker, List, ListItem, Icon } from 
 import { ImageBackground, StyleSheet, ScrollView, Modal, TouchableHighlight, TouchableOpacity, Linking } from 'react-native';
 import image from "../../assets/images/background.jpg"
 import { connect } from "react-redux"
-import { fetchStudent } from "../../redux"
+import { fetchVacancy, companyPostDelete } from "../../redux"
 
-const Details = (e) => {
-    return (
-        <View>
-            <Text>Name: {e.name}</Text>
-            <Text>Age: {e.age}</Text>
-        </View>
-    )
-}
-
-const ViewResume = (props) => {
-    const [selected, setSelected] = useState("O+")
+const CheckForVacancy = (props) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [item, setItem] = useState({
         name: "",
         age: "",
     })
-    const [donors, setDonors] = useState([{}])
 
     useEffect(() => {
-        // let arr = []
-        // database().ref("/").orderByChild("selected").equalTo(selected).once("value", function (snapshot) {
-        //     snapshot.forEach(function (child) {
-        //         arr.push(child.val()) // NOW THE CHILDREN PRINT IN ORDER    
-        //     });
-        //     setDonors(() => arr)
-        // })
-        props.fetchStudent()
+        props.fetchVacancy()
     }, [])
-
-    useEffect(() => {
-        console.log("\n\n\nStudent: " + props.student.student + "\n\n\n")
-    }, [props.student])
 
     return (
         <Container>
@@ -60,13 +38,16 @@ const ViewResume = (props) => {
                             <Text style={styles.textStyle}>Close</Text>
                         </TouchableHighlight>
                         <View style={styles.modalView}>
-                            <Text style={styles.modalText}>Name: {item.name}</Text>
-                            <Text style={styles.modalText}>Percentage: {item.report ? item.report.percentage : ""}</Text>
+                            <Text style={styles.modalText}>Title: {item.title}</Text>
+                            <Text style={styles.modalText}>Required Percentage: {item.perc}%</Text>
                             <TouchableOpacity onPress={() => Linking.openURL(`tel:${item.contact}`)}>
                                 <Text style={styles.modalText}>Contact: {item.contact} <Text style={{ fontSize: 10 }}>(Click To Call)</Text></Text>
                             </TouchableOpacity>
-                            <Text style={styles.modalText}>Email: {item.email}</Text>
-
+                            <Text style={styles.modalText}>Company Description: {item.description}</Text>
+                            <Text style={styles.modalText}>Company Name: {item.companyName}</Text>
+                            <Text style={styles.modalText}>Company Address: {item.companyAddress}</Text>
+                            <Text style={styles.modalText}>Company Email: {item.email}</Text>
+                            <Text style={styles.modalText}>Available Seats: {item.seats}</Text>
                         </View>
                     </View>
                 </View>
@@ -76,32 +57,42 @@ const ViewResume = (props) => {
                     <ScrollView>
                         <List style={{ backgroundColor: "white" }}>
                             {
-                                props.student.student.map((item, ind) => {
-                                    return (
-                                        <ListItem key={ind} button onPress={() => { setModalVisible(true), setItem(item) }} style={{justifyContent: "space-between"}}>
-                                            <Text>{item.name}</Text>
-                                            <Text>{item.report.percentage}</Text>
-                                        </ListItem>
-                                    )
-                                })
+                                props.company.company[0] ?
+                                    props.company.company.map((item, ind) => {
+                                        return (
+                                            <ListItem key={ind} button onPress={() => { setModalVisible(true), setItem(item) }} style={{ justifyContent: "space-between" }}>
+                                                <Text>{item.title}</Text>
+                                                {
+                                                    props.user.user.type === "Admin" &&
+                                                    <TouchableHighlight activeOpacity={0.8} onPress={() => props.companyPostDelete(item.uid) }><Text style={styles.btnText}>Delete Vacancy</Text></TouchableHighlight>
+                                                }
+                                            </ListItem>
+                                        )
+                                    })
+                                    :
+                                    <ListItem button>
+                                        <Text>No Vacancies Right now</Text>
+                                    </ListItem>
                             }
                         </List>
                     </ScrollView>
                 </View>
             </ImageBackground>
-        </Container >
+        </Container>
     )
 }
 
 const mapStateToProps = (state) => ({
-    student: state.student
+    user: state.user,
+    company: state.company
 })
 
 const mapDispatchToProps = (dispatch) => ({
-    fetchStudent: () => dispatch(fetchStudent()),
+    companyPostDelete: (data) => dispatch(companyPostDelete(data)),
+    fetchVacancy: () => dispatch(fetchVacancy()),
 })
 
-export default connect(mapStateToProps, mapDispatchToProps)(ViewResume);
+export default connect(mapStateToProps, mapDispatchToProps)(CheckForVacancy);
 
 const styles = StyleSheet.create({
     image: {
@@ -119,6 +110,9 @@ const styles = StyleSheet.create({
     },
     btn: {
         marginTop: 20,
+    },
+    btn: {
+        fontSize: 10,
     },
     inputItem: {
         backgroundColor: "rgba(255, 255, 255, 0.9)",
